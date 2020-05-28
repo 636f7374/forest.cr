@@ -75,7 +75,7 @@ req/s           :      27.79       28.50       28.14        0.26    55.00%
 * Curl
 
 ```text
-iMac:~ User$ curl -v "https://127.0.0.1:9876" --insecure
+User$ curl -v "https://127.0.0.1:9876" --insecure
 *   Trying 127.0.0.1:9876...
 * Connected to 127.0.0.1 (127.0.0.1) port 9876 (#0)
 * ALPN, offering h2
