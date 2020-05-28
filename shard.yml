@@ -1,0 +1,11 @@
+name: forest
+version: 0.1.0
+
+dependencies:
+  cherry:
+    github: 636f7374/cherry.cr
+
+authors:
+  - 636f7374
+
+license: MIT
