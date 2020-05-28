@@ -20,7 +20,7 @@
 * Since Crystal language lacks a perfect HTTP2 implementation, we implemented it.
   * We spent some time to do this, it is not very easy.
   * We started looking at [many documents](#references) and started researching how to build a HTTP2 server.
-* In the `Hpack`, `Huffman` part, we refer to the design of [ysbaddaden](https://github.com/ysbaddaden).
+* In the `Hpack`, `Huffman` part, we reference to the design of [ysbaddaden](https://github.com/ysbaddaden).
 * Channel design (ConnectionPool) is used inside HTTP2 server.
 * It currently supports most HTTP2 flow control features (excluding priority).
 * It can currently be perfectly combined with HTTP1 server.
