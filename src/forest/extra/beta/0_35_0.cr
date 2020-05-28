@@ -15,9 +15,6 @@ class HTTP::Server
   end
 
   private def handle_client(io : IO)
-    io.read_timeout = 5_i32 if io.responds_to? :read_timeout=
-    io.write_timeout = 5_i32 if io.responds_to? :write_timeout=
-
     if io.is_a?(IO::Buffered)
       io.sync = false
     end
