@@ -12,5 +12,5 @@ server = HTTP::Server.new [HTTP::CompressHandler.new] do |context|
 end
 
 address = server.bind_tls Socket::IPAddress.new("0.0.0.0", 9876_i32), context
-STDOUT.puts "Listening on http://#{address}"
+STDOUT.puts "Listening on https://#{address}"
 server.listen
