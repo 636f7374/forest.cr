@@ -19,6 +19,7 @@
 
 * Since Crystal language lacks a perfect HTTP2 implementation, we implemented it.
   * We spent some time to do this, it is not very easy.
+  * We started looking at [many documents](#references) and started researching how to build a HTTP2 server.
 * In the `Hpack`, `Huffman` part, we refer to the design of [ysbaddaden](https://github.com/ysbaddaden).
 * Channel design (ConnectionPool) is used inside HTTP2 server.
 * It currently supports most HTTP2 flow control features (excluding priority).
@@ -156,6 +157,17 @@ $ cd forest.cr && make build && make install
 ```bash
 $ make test
 ```
+
+## References
+
+* [StackOverflow - Why do web browsers not support h2c (HTTP/2 without TLS)?](https://stackoverflow.com/questions/46788904/why-do-web-browsers-not-support-h2c-http-2-without-tls)
+* [HttpWG - Hypertext Transfer Protocol Version 2 (HTTP/2)](https://http2.github.io/http2-spec/)
+* [Blog - Programmersought HTTP2 detailed](http://www.programmersought.com/article/6185820249/)
+* [StackOverflow - WINDOW_UPDATE HTTP/2 frame](https://stackoverflow.com/questions/51538391/window-update-http-2-frame)
+* [Blog - HTTP: HTTP/2 - High Performance Browser Networking (O'Reilly)](https://hpbn.co/http2/)
+* [Medium - HTTP/2 Flow Control](https://medium.com/coderscorner/http-2-flow-control-77e54f7fd518)
+* [Cloudflare - HTTP/2 For Web Developers](https://blog.cloudflare.com/http-2-for-web-developers/)
+* [Wireshark - Hypertext Transfer Protocol version 2](https://wiki.wireshark.org/HTTP2)
 
 ## Credit
 
