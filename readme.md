@@ -32,7 +32,7 @@
 
 * [X] Basic HTTP2 server features.
 * [X] HTTP Server compatibility (HTTP1 & HTTP2).
-* [X] Simplify the complex, clear code syntax.
+* [X] Simplify the complex, Clear code syntax.
 * [ ] HTTP2 client feature.
 * [ ] More Spec tests.
 * [ ] Production environment testing.
