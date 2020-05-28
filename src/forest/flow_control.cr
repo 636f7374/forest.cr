@@ -18,7 +18,7 @@ class Forest::FlowControl
   end
 
   def max_header_continuation_size
-    @maxHeaderContinuationSize || MAX_HEADER_CONTINUATION_SIZE
+    @maxHeaderContinuationSize ||= MAX_HEADER_CONTINUATION_SIZE
   end
 
   def max_header_table_size=(value : Int32)
@@ -26,7 +26,7 @@ class Forest::FlowControl
   end
 
   def max_header_table_size
-    @maxHeaderTableSize || SETTINGS_HEADER_TABLE_SIZE
+    @maxHeaderTableSize ||= SETTINGS_HEADER_TABLE_SIZE
   end
 
   def max_concurrent_streams=(value : Int32)
@@ -34,7 +34,7 @@ class Forest::FlowControl
   end
 
   def max_concurrent_streams
-    @maxConcurrentStreams || SETTINGS_MAX_CONCURRENT_STREAMS
+    @maxConcurrentStreams ||= SETTINGS_MAX_CONCURRENT_STREAMS
   end
 
   def max_initial_window_size=(value : Int32)
@@ -42,7 +42,7 @@ class Forest::FlowControl
   end
 
   def max_initial_window_size
-    @maxInitialWindowSize || SETTINGS_INITIAL_WINDOW_SIZE
+    @maxInitialWindowSize ||= SETTINGS_INITIAL_WINDOW_SIZE
   end
 
   def max_frame_size=(value : Int32)
@@ -50,7 +50,7 @@ class Forest::FlowControl
   end
 
   def max_frame_size
-    @maxFrameSize || SETTINGS_MAX_FRAME_SIZE
+    @maxFrameSize ||= SETTINGS_MAX_FRAME_SIZE
   end
 
   def max_header_list_size=(value : Int32)
@@ -58,7 +58,7 @@ class Forest::FlowControl
   end
 
   def max_header_list_size
-    @maxHeaderListSize || SETTINGS_MAX_HEADER_LIST_SIZE
+    @maxHeaderListSize ||= SETTINGS_MAX_HEADER_LIST_SIZE
   end
 
   def header_continuation_size=(value : Int32)
@@ -87,7 +87,7 @@ class Forest::FlowControl
   end
 
   def enable_push
-    @enablePush || SETTINGS_ENABLE_PUSH
+    @enablePush ||= SETTINGS_ENABLE_PUSH
   end
 
   def concurrent_streams=(value : Int32)

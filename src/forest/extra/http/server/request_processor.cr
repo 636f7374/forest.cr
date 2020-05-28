@@ -4,7 +4,7 @@ class HTTP::Server::RequestProcessor
   end
 
   def max_header_continuation_size
-    @maxHeaderContinuationSize || Forest::MAX_HEADER_CONTINUATION_SIZE
+    @maxHeaderContinuationSize ||= Forest::MAX_HEADER_CONTINUATION_SIZE
   end
 
   def max_header_table_size=(value : Int32)
@@ -12,7 +12,7 @@ class HTTP::Server::RequestProcessor
   end
 
   def max_header_table_size
-    @maxHeaderTableSize || Forest::SETTINGS_HEADER_TABLE_SIZE
+    @maxHeaderTableSize ||= Forest::SETTINGS_HEADER_TABLE_SIZE
   end
 
   def max_concurrent_streams=(value : Int32)
@@ -20,7 +20,7 @@ class HTTP::Server::RequestProcessor
   end
 
   def max_concurrent_streams
-    @maxConcurrentStreams || Forest::SETTINGS_MAX_CONCURRENT_STREAMS
+    @maxConcurrentStreams ||= Forest::SETTINGS_MAX_CONCURRENT_STREAMS
   end
 
   def max_initial_window_size=(value : Int32)
@@ -28,7 +28,7 @@ class HTTP::Server::RequestProcessor
   end
 
   def max_initial_window_size
-    @maxInitialWindowSize || Forest::SETTINGS_INITIAL_WINDOW_SIZE
+    @maxInitialWindowSize ||= Forest::SETTINGS_INITIAL_WINDOW_SIZE
   end
 
   def max_frame_size=(value : Int32)
@@ -36,7 +36,7 @@ class HTTP::Server::RequestProcessor
   end
 
   def max_frame_size
-    @maxFrameSize || Forest::SETTINGS_MAX_FRAME_SIZE
+    @maxFrameSize ||= Forest::SETTINGS_MAX_FRAME_SIZE
   end
 
   def max_header_list_size=(value : Int32)
@@ -44,7 +44,7 @@ class HTTP::Server::RequestProcessor
   end
 
   def max_header_list_size
-    @maxHeaderListSize || Forest::SETTINGS_MAX_HEADER_LIST_SIZE
+    @maxHeaderListSize ||= Forest::SETTINGS_MAX_HEADER_LIST_SIZE
   end
 
   private def connection_process(input : IO, output : IO, error = STDERR)
