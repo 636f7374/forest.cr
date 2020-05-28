@@ -20,9 +20,9 @@
 * Since Crystal language lacks a perfect HTTP2 implementation, we implemented it.
   * We spent some time to do this, it is not very easy.
 * In the `Hpack`, `Huffman` part, we refer to the design of [ysbaddaden](https://github.com/ysbaddaden).
-* Channel design (ConnectionPool) is used inside HTTP2 server
+* Channel design (ConnectionPool) is used inside HTTP2 server.
 * It currently supports most HTTP2 flow control features (excluding priority).
-* It can currently be perfectly combined with HTTP1 server 
+* It can currently be perfectly combined with HTTP1 server.
   * Including `Chunked`, `Compress`, and `Empty body`, ...
 * Currently it needs to be regularly synchronized with Crystal upstream.
   * Some monkey patches were used at the junction (E.g. `Server::RequestProcessor`, `Server::Response`).
@@ -139,7 +139,7 @@ server = HTTP::Server.new [HTTP::CompressHandler.new] do |context|
 end
 
 address = server.bind_tls Socket::IPAddress.new("0.0.0.0", 9876_i32), context
-STDOUT.puts "Listening on http://#{address}"
+STDOUT.puts "Listening on https://#{address}"
 server.listen
 ```
 
