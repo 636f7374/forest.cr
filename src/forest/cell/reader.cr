@@ -25,7 +25,7 @@ module Forest::Cell
       (0_i32 > windowRemaining.get) || windowRemaining.get.zero?
     end
 
-    def unbuffered_write(slice : Bytes) : Nil
+    def unbuffered_write(slice : Bytes) : Int64
       raise "Can't read from Forest::Cell::Reader"
     end
 

@@ -1,3 +1,5 @@
+# Commits on May 28, 2020
+
 class HTTP::Server
   class Response
     def stream_identifier=(value : Int32)
@@ -56,8 +58,8 @@ class HTTP::Server
       @written ||= false
     end
 
-    def write(slice : Bytes) : Nil
-      return if slice.empty?
+    def write(slice : Bytes) : Int64
+      return 0_i64 if slice.empty?
       self.written = true unless written?
 
       output.write slice
@@ -202,10 +204,24 @@ class HTTP::Server
         ensure_headers_written
         return @io.write slice unless @chunked
 
-        slice.size.to_s 16_i32, @io
+        slice.size.to_s @io, 16_i32
         @io << "\r\n"
         @io.write slice
         @io << "\r\n"
+      rescue ex : IO::Error
+        unbuffered_close
+        raise ClientError.new "Error while writing data to the client", ex
+      end
+
+      private def unbuffered_rewind
+        raise "Can't rewind to HTTP::Server::Response"
+      end
+
+      private def unbuffered_flush
+        @io.flush
+      rescue ex : IO::Error
+        unbuffered_close
+        raise ClientError.new "Error while flushing data to the client", ex
       end
 
       private def write_data(slice : Bytes)

@@ -43,9 +43,9 @@
 * h2load
 
 ```text
-User$ h2load -n 10000 -c 100 -t 1 -T 5 -m 10 -H 'Accept-Encoding: gzip,deflate' https://127.0.0.1:9876/
+$ h2load -n 100000 -c 100 -t 1 -T 5 -m 10 -H 'Accept-Encoding: gzip,deflate' https://127.0.0.1:9876
 starting benchmark...
-spawning thread #0: 100 total client(s). 10000 total requests
+spawning thread #0: 100 total client(s). 100000 total requests
 TLS Protocol: TLSv1.3
 Cipher: TLS_AES_256_GCM_SHA384
 Server Temp Key: ECDH P-256 256 bits
@@ -61,21 +61,21 @@ progress: 80% done
 progress: 90% done
 progress: 100% done
 
-finished in 3.60s, 2778.74 req/s, 99.51KB/s
-requests: 10000 total, 10000 started, 10000 done, 10000 succeeded, 0 failed, 0 errored, 0 timeout
-status codes: 10000 2xx, 0 3xx, 0 4xx, 0 5xx
-traffic: 358.11KB (366700) total, 58.59KB (60000) headers (space savings 76.92%), 117.19KB (120000) data
+finished in 13.87s, 7211.28 req/s, 444.13KB/s
+requests: 100000 total, 100000 started, 100000 done, 100000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 100000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 6.01MB (6306700) total, 1.24MB (1300000) headers (space savings 71.74%), 3.05MB (3200000) data
                      min         max         mean         sd        +/- sd
-time for request:    37.14ms       2.95s    211.66ms    502.29ms    92.10%
-time for connect:    40.55ms       2.83s       1.44s    818.55ms    58.00%
-time to 1st byte:      2.92s       2.99s       2.95s     21.86ms    58.00%
-req/s           :      27.79       28.50       28.14        0.26    55.00%
+time for request:    38.82ms       4.81s    114.24ms    270.90ms    99.05%
+time for connect:    63.65ms       4.71s       2.38s       1.36s    58.00%
+time to 1st byte:      4.79s       4.90s       4.85s     34.04ms    56.00%
+req/s           :      72.12       72.70       72.42        0.20    55.00%
 ```
 
 * Curl
 
 ```text
-User$ curl -v "https://127.0.0.1:9876" --insecure
+$ curl -v "https://127.0.0.1:9876" --insecure
 *   Trying 127.0.0.1:9876...
 * Connected to 127.0.0.1 (127.0.0.1) port 9876 (#0)
 * ALPN, offering h2
@@ -100,14 +100,14 @@ User$ curl -v "https://127.0.0.1:9876" --insecure
 *  start date: Jun 30 08:22:14 2019 GMT
 *  expire date: Jun 29 08:22:14 2021 GMT
 *  issuer: C=FI; ST= ; L= ; O= ; OU= ; CN=Finland; emailAddress= 
-*  SSL certificate verify ok.
+*  SSL certificate verify result: self signed certificate (18), continuing anyway.
 * Using HTTP2, server supports multi-use
 * Connection state changed (HTTP/2 confirmed)
 * Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
-* Using Stream ID: 1 (easy handle 0x7ff359006e00)
+* Using Stream ID: 1 (easy handle 0x7fda93013a00)
 > GET / HTTP/2
-> Host: 127.0.0.1:8844
-> user-agent: curl/7.69.1
+> Host: 127.0.0.1:9876
+> user-agent: curl/7.70.0
 > accept: */*
 > 
 * TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
@@ -118,7 +118,7 @@ User$ curl -v "https://127.0.0.1:9876" --insecure
 < content-length: 12
 < 
 * Connection #0 to host 127.0.0.1 left intact
-hello world!
+Hello World!
 ```
 
 ## Usage

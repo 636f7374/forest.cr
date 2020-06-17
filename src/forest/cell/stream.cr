@@ -16,7 +16,8 @@ module Forest::Cell
       writer.write frame
     end
 
-    def write(slice : Bytes) : Nil
+    def write(slice : Bytes) : Int64
+      raise "It does not support writing Bytes"
     end
 
     def read(slice : Bytes) : Int32

@@ -1,3 +1,5 @@
+# Commits on May 11, 2020
+
 class HTTP::Server::RequestProcessor
   def max_header_continuation_size=(value : Int32)
     @maxHeaderContinuationSize = value
@@ -65,7 +67,7 @@ class HTTP::Server::RequestProcessor
 
     case version
     when Version::HTTP_1_0, Version::HTTP_1_1
-      process_http1 request: request, input: input, output: output, error: error
+      process_http1 request: request, input: input, output: output
     when Version::HTTP_2_0
       preface_buffer = uninitialized UInt8[6_i32]
       length = input.read preface_buffer.to_slice
@@ -266,9 +268,8 @@ class HTTP::Server::RequestProcessor
     end
   end
 
-  def process_http1(request : HTTP::Request, input : IO, output : IO, error = STDERR)
-    must_close = true
-    response = Response.new(output)
+  def process_http1(request : HTTP::Request, input : IO, output : IO)
+    response = Response.new output
     first_process = true
 
     begin
@@ -280,51 +281,69 @@ class HTTP::Server::RequestProcessor
         end
 
         # EOF
+
         break unless request
 
-        if request.is_a?(HTTP::Status)
-          response.respond_with_status(request)
+        if request.is_a? HTTP::Status
+          response.respond_with_status request
+
           return
         end
 
         response.version = request.version
         response.reset
         response.headers["Connection"] = "keep-alive" if request.keep_alive?
-        context = Context.new(request, response)
+        context = Context.new request, response
 
         begin
-          @handler.call(context)
+          @handler.call context
+        rescue ex : ClientError
+          Log.debug(exception: ex.cause) { ex.message }
         rescue ex
-          response.respond_with_status(:internal_server_error)
-          error.puts "Unhandled exception on HTTP::Handler"
-          ex.inspect_with_backtrace(error)
+          Log.error(exception: ex) { "Unhandled exception on HTTP::Handler" }
+
+          unless response.closed?
+            unless response.wrote_headers?
+              response.respond_with_status :internal_server_error
+            end
+          end
+
           return
+        ensure
+          response.output.close
         end
 
-        if response.upgraded?
-          must_close = false
-          return
-        end
-
-        response.output.close
         output.flush
+
+        # If there is an upgrade handler, hand over
+        # the connection to it and return
+
+        if upgrade_handler = response.upgrade_handler
+          upgrade_handler.call output
+
+          return
+        end
 
         break unless request.keep_alive?
 
         # Don't continue if the handler set `Connection` header to `close`
-        break unless HTTP.keep_alive?(response)
+
+        break unless HTTP.keep_alive? response
 
         # The request body is either FixedLengthContent or ChunkedContent.
         # In case it has not entirely been consumed by the handler, the connection is
         # closed the connection even if keep alive was requested.
+
         case body = request.body
         when FixedLengthContent
           if body.read_remaining > 0_i32
             # Close the connection if there are bytes remaining
+
             break
           end
         when ChunkedContent
           # Close the connection if the IO has still bytes to read.
+
           break unless body.closed?
         else
           # Nothing to do
@@ -332,12 +351,6 @@ class HTTP::Server::RequestProcessor
       end
     rescue IO::Error
       # IO-related error, nothing to do
-    ensure
-      begin
-        input.close if must_close
-      rescue IO::Error
-        # IO-related error, nothing to do
-      end
     end
   end
 
