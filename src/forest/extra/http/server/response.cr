@@ -58,7 +58,7 @@ class HTTP::Server
       @written ||= false
     end
 
-    def write(slice : Bytes) : Int64
+    def write(slice : Bytes) : Nil
       return 0_i64 if slice.empty?
       self.written = true unless written?
 

@@ -49,7 +49,7 @@ class HTTP::Server::RequestProcessor
     @maxHeaderListSize ||= Forest::SETTINGS_MAX_HEADER_LIST_SIZE
   end
 
-  private def connection_process(input : IO, output : IO, error = STDERR)
+  private def process_connection(input : IO, output : IO, error = STDERR)
     request = HTTP::Request.from_io input, max_request_line_size: max_request_line_size,
       max_headers_size: max_headers_size rescue nil
 
@@ -355,6 +355,6 @@ class HTTP::Server::RequestProcessor
   end
 
   def process(input : IO, output : IO, error = STDERR)
-    connection_process input: input, output: output, error: error
+    process_connection input: input, output: output, error: error
   end
 end

@@ -27,7 +27,7 @@
   * Including `Chunked`, `Compress`, and `Empty body`, ...
 * Currently it needs to be regularly synchronized with Crystal upstream.
   * Some monkey patches were used at the junction (E.g. `Server::RequestProcessor`, `Server::Response`).
-  * Crystal 0.35.0 is currently not supported.
+  * Currently only supports up to Crystal `0.35.1`.
 
 ## Features
 
@@ -36,7 +36,7 @@
 * [X] Simplify the complex, Clear code syntax.
 * [ ] HTTP2 client feature.
 * [ ] More Spec tests.
-* [ ] Production environment testing.
+* [ ] More Contributions.
 
 ## Test Information
 
@@ -61,64 +61,96 @@ progress: 80% done
 progress: 90% done
 progress: 100% done
 
-finished in 13.87s, 7211.28 req/s, 444.13KB/s
+finished in 12.11s, 8255.80 req/s, 508.46KB/s
 requests: 100000 total, 100000 started, 100000 done, 100000 succeeded, 0 failed, 0 errored, 0 timeout
 status codes: 100000 2xx, 0 3xx, 0 4xx, 0 5xx
 traffic: 6.01MB (6306700) total, 1.24MB (1300000) headers (space savings 71.74%), 3.05MB (3200000) data
                      min         max         mean         sd        +/- sd
-time for request:    38.82ms       4.81s    114.24ms    270.90ms    99.05%
-time for connect:    63.65ms       4.71s       2.38s       1.36s    58.00%
-time to 1st byte:      4.79s       4.90s       4.85s     34.04ms    56.00%
-req/s           :      72.12       72.70       72.42        0.20    55.00%
+time for request:    27.49ms       3.00s    105.87ms    165.93ms    99.04%
+time for connect:    45.34ms       2.89s       1.47s    831.38ms    58.00%
+time to 1st byte:      2.96s       3.08s       3.02s     32.89ms    58.00%
+req/s           :      82.57       83.63       82.95        0.34    74.00%
 ```
 
 * Curl
 
 ```text
 $ curl -v "https://127.0.0.1:9876" --insecure
-*   Trying 127.0.0.1:9876...
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
 * Connected to 127.0.0.1 (127.0.0.1) port 9876 (#0)
 * ALPN, offering h2
 * ALPN, offering http/1.1
 * successfully set certificate verify locations:
-*   CAfile: /usr/local/etc/openssl@1.1/cert.pem
-  CApath: /usr/local/etc/openssl@1.1/certs
-* TLSv1.3 (OUT), TLS handshake, Client hello (1):
-* TLSv1.3 (IN), TLS handshake, Server hello (2):
-* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
-* TLSv1.3 (OUT), TLS handshake, Client hello (1):
-* TLSv1.3 (IN), TLS handshake, Server hello (2):
-* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
-* TLSv1.3 (IN), TLS handshake, Certificate (11):
-* TLSv1.3 (IN), TLS handshake, CERT verify (15):
-* TLSv1.3 (IN), TLS handshake, Finished (20):
-* TLSv1.3 (OUT), TLS handshake, Finished (20):
-* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+*   CAfile: /etc/ssl/cert.pem
+  CApath: none
+* TLSv1.2 (OUT), TLS handshake, Client hello (1):
+* TLSv1.2 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
 * ALPN, server accepted to use h2
 * Server certificate:
 *  subject: C=FI; ST= ; L= ; O= ; OU= ; CN=Finland; emailAddress= 
 *  start date: Jun 30 08:22:14 2019 GMT
 *  expire date: Jun 29 08:22:14 2021 GMT
 *  issuer: C=FI; ST= ; L= ; O= ; OU= ; CN=Finland; emailAddress= 
-*  SSL certificate verify result: self signed certificate (18), continuing anyway.
+*  SSL certificate verify ok.
 * Using HTTP2, server supports multi-use
 * Connection state changed (HTTP/2 confirmed)
 * Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
-* Using Stream ID: 1 (easy handle 0x7fda93013a00)
+* Using Stream ID: 1 (easy handle 0x7fde8580dc00)
 > GET / HTTP/2
 > Host: 127.0.0.1:9876
-> user-agent: curl/7.70.0
-> accept: */*
+> User-Agent: curl/7.64.1
+> Accept: */*
 > 
-* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
-* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
-* old SSL session ID is stale, removing
 * Connection state changed (MAX_CONCURRENT_STREAMS == 100)!
 < HTTP/2 200 
 < content-length: 12
 < 
 * Connection #0 to host 127.0.0.1 left intact
 Hello World!
+* Closing connection 0
+```
+
+## Multithreading (Parallel)
+
+* Crystal enabling `-Dpreview_mt` will cause a lot of `failed` in h2load.
+  * This will increase the speed by `1x`, this problem needs to be resolved.
+
+```text
+$ h2load -n 100000 -c 100 -t 1 -T 5 -m 10 -H 'Accept-Encoding: gzip,deflate' https://127.0.0.1:9876
+starting benchmark...
+spawning thread #0: 100 total client(s). 100000 total requests
+TLS Protocol: TLSv1.3
+Cipher: TLS_AES_256_GCM_SHA384
+Server Temp Key: ECDH P-256 256 bits
+Application protocol: h2
+progress: 10% done
+progress: 20% done
+progress: 30% done
+progress: 40% done
+progress: 50% done
+progress: 60% done
+progress: 70% done
+progress: 80% done
+
+finished in 5.51s, 14877.00 req/s, 916.71KB/s
+requests: 100000 total, 82180 started, 82000 done, 82000 succeeded, 18000 failed, 18000 errored, 0 timeout
+status codes: 82018 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 4.93MB (5174068) total, 1.02MB (1066234) headers (space savings 71.74%), 2.50MB (2624000) data
+                     min         max         mean         sd        +/- sd
+time for request:      105us    970.27ms     46.09ms     95.82ms    90.93%
+time for connect:    53.03ms    789.04ms    413.19ms    219.45ms    60.00%
+time to 1st byte:   785.89ms       1.20s    872.68ms     84.87ms    89.02%
+req/s           :       0.00      254.78      163.72       78.86    79.00%
 ```
 
 ## Usage
