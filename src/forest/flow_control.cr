@@ -148,13 +148,13 @@ class Forest::FlowControl
       when .enable_push?
         self.enable_push = value
       when .max_concurrent_streams?
-        self.max_concurrent_streams = value
+        self.concurrent_streams = value
       when .initial_window_size?
         self.initial_window_size = value
       when .max_frame_size?
-        self.max_frame_size = value
+        self.frame_size = value
       when .max_header_list_size?
-        self.max_header_list_size = value
+        self.header_list_size = value
       end
     end
   end

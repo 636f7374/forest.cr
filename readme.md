@@ -27,7 +27,7 @@
   * Including `Chunked`, `Compress`, and `Empty body`, ...
 * Currently it needs to be regularly synchronized with Crystal upstream.
   * Some monkey patches were used at the junction (E.g. `Server::RequestProcessor`, `Server::Response`).
-  * Currently only supports up to Crystal `0.35.1`.
+  * Currently only supports up to Crystal `0.36`.
 
 ## Features
 

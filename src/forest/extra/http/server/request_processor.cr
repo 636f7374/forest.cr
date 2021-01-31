@@ -1,4 +1,4 @@
-# Commits on May 11, 2020
+# Commits on Oct 30, 2020
 
 class HTTP::Server::RequestProcessor
   def max_header_continuation_size=(value : Int32)
